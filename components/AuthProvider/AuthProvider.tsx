@@ -27,6 +27,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         }
       } else {
         clearIsAuthenticated();
+        isLoading(false);
       }
     };
     fetchUser();
