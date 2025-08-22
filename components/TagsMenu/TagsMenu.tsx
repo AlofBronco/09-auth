@@ -16,13 +16,13 @@ const TagsMenu = () => {
       </button>
       {isOpen && (
         <ul className={css.menuList}>
-          <li className={css.menuItem}>
+          <li className={css.menuItem} onClick={() => setIsOpen(false)}>
             <Link href={`/notes/filter/All`} className={css.menuLink}>
               All
             </Link>
           </li>
           {tags.map(tag => (
-            <li className={css.menuItem} key={tag}>
+            <li className={css.menuItem} key={tag} onClick={() => setIsOpen(false)}>
               <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
                 {tag}
               </Link>

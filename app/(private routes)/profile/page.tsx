@@ -7,7 +7,7 @@ import { getServerMe } from '@/lib/api/serverApi';
 export async function generateMetadata(): Promise<Metadata> {
   const user = await getServerMe();
   return {
-    title: 'Profile Page',
+    title: `${user.username} | NoteHub`,
     description: `${user.username} profile page`,
     openGraph: {
       title: 'Profile Page',
