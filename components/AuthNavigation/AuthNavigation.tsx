@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 const AuthNavigation = () => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const clearIsAuthenticated = useAuthStore(state => state.clearIsAuthenticated);
+  const user = useAuthStore(state => state.user);
   const router = useRouter();
 
   const handleClick = async () => {
@@ -27,7 +28,7 @@ const AuthNavigation = () => {
             </Link>
           </li>
           <li className={css.navigationItem}>
-            <p className={css.userEmail}>User email</p>
+            <p className={css.userEmail}>{user?.email}</p>
             <button className={css.logoutButton} onClick={handleClick}>
               Logout
             </button>

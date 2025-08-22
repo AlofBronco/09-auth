@@ -3,11 +3,18 @@
 import { NoteTag } from '@/types/note';
 import css from './TagsMenu.module.css';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const TagsMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const tags: NoteTag[] = ['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <div className={css.menuContainer}>
