@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { nextServer } from './api';
 import { LoginUser } from '@/types/user';
+import { Note, NoteTag } from '@/types/note';
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -20,4 +21,28 @@ export const getServerMe = async (): Promise<LoginUser> => {
     },
   });
   return data;
+};
+
+interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
+export const fetchServerNotes = async (query: string, page: number, tag?: NoteTag): Promise<FetchNotesResponse> => {
+  try {
+    const cookieStore = await cookies();
+    const res = await nextServer.get<FetchNotesResponse>('/notes', {
+      params: {
+        search: query,
+        page,
+        tag,
+      },
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
+    return res.data;
+  } catch {
+    throw new Error('Error fetching notes');
+  }
 };
