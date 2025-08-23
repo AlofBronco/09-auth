@@ -5,24 +5,23 @@ import css from './EditProfile.module.css';
 import { useEffect, useState } from 'react';
 import { getMe, updateMe } from '@/lib/api/clientApi';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/authStore';
+import { User } from '@/types/user';
 
 const EditProfile = () => {
-  const [userEmail, setUserEmail] = useState('');
-  const [userName, setUserName] = useState('');
-  const [userImage, setUserImage] = useState('');
+  const [userData, setUserData] = useState<User>();
+  const setUser = useAuthStore(state => state.setUser);
   const router = useRouter();
 
   useEffect(() => {
-    getMe().then(user => {
-      setUserEmail(user.email);
-      setUserName(user.username);
-      setUserImage(user.avatar);
-    });
+    getMe().then(setUserData);
   }, []);
 
   const handleSubmit = async () => {
+    if (!userData) return;
     try {
-      await updateMe({ username: userName, email: userEmail });
+      setUser(userData);
+      await updateMe({ username: userData?.username });
       router.push('/profile');
     } catch (error) {
       console.error('Oops, some error:', error);
@@ -30,7 +29,7 @@ const EditProfile = () => {
   };
 
   const handleReturn = () => {
-    router.push('/profile');
+    router.back();
   };
 
   return (
@@ -38,15 +37,21 @@ const EditProfile = () => {
       <div className={css.profileCard}>
         <h1 className={css.formTitle}>Edit Profile</h1>
 
-        {userImage && <Image src={userImage} alt="User Avatar" width={120} height={120} className={css.avatar} />}
+        {userData?.avatar && <Image src={userData?.avatar} alt="User Avatar" width={120} height={120} className={css.avatar} />}
 
         <form className={css.profileInfo} action={handleSubmit}>
           <div className={css.usernameWrapper}>
             <label htmlFor="username">Username:</label>
-            <input id="username" type="text" className={css.input} value={userName} onChange={e => setUserName(e.target.value)} />
+            <input
+              id="username"
+              type="text"
+              className={css.input}
+              value={userData?.username}
+              onChange={e => setUserData(userData ? { ...userData, username: e.target.value } : undefined)}
+            />
           </div>
 
-          <p>Email: {userEmail}</p>
+          <p>Email: {userData?.email}</p>
 
           <div className={css.actions}>
             <button type="submit" className={css.saveButton}>

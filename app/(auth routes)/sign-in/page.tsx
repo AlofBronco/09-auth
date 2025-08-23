@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import css from './SignIn.module.css';
 import { useRouter } from 'next/navigation';
-import { User } from '@/types/user';
+import { LoginRequest } from '@/types/user';
 import { login } from '@/lib/api/clientApi';
 import { ApiError } from '@/lib/api/api';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -15,7 +15,7 @@ const SignIn = () => {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      const values = Object.fromEntries(formData) as User;
+      const values = Object.fromEntries(formData) as LoginRequest;
       const res = await login(values);
       if (res) {
         setUser(res);

@@ -1,6 +1,6 @@
 import { NewNote, Note, NoteTag } from '@/types/note';
 import { nextServer } from './api';
-import { LoginUser, RegisterUser, User } from '@/types/user';
+import { LoginRequest, RegisterRequest, User } from '@/types/user';
 
 interface FetchNotesResponse {
   notes: Note[];
@@ -49,13 +49,13 @@ export const deleteNote = async (noteId: string): Promise<Note> => {
   }
 };
 
-export const register = async (data: User): Promise<RegisterUser> => {
-  const res = await nextServer.post<RegisterUser>('/auth/register', data);
+export const register = async (data: RegisterRequest): Promise<User> => {
+  const res = await nextServer.post<User>('/auth/register', data);
   return res.data;
 };
 
-export const login = async (data: User): Promise<LoginUser> => {
-  const res = await nextServer.post<LoginUser>('/auth/login', data);
+export const login = async (data: LoginRequest): Promise<User> => {
+  const res = await nextServer.post<User>('/auth/login', data);
   return res.data;
 };
 
@@ -73,11 +73,15 @@ export const getSession = async () => {
 };
 
 export const getMe = async () => {
-  const res = await nextServer.get<LoginUser>('/users/me');
+  const res = await nextServer.get<User>('/users/me');
   return res.data;
 };
 
-export const updateMe = async (data: RegisterUser) => {
-  const res = await nextServer.patch<LoginUser>('/users/me', data);
+interface UpdateRequest {
+  username: string;
+}
+
+export const updateMe = async (data: UpdateRequest) => {
+  const res = await nextServer.patch<User>('/users/me', data);
   return res.data;
 };

@@ -1,14 +1,14 @@
-export type User = {
+export type LoginRequest = {
   email: string;
   password: string;
 };
 
-export interface RegisterUser {
+export interface RegisterRequest {
   username: string;
   email: string;
 }
 
-export interface LoginUser {
+export interface User {
   username: string;
   email: string;
   avatar: string;

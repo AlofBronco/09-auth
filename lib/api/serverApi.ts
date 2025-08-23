@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { nextServer } from './api';
-import { LoginUser } from '@/types/user';
+import { User } from '@/types/user';
 import { Note, NoteTag } from '@/types/note';
 
 export const checkServerSession = async () => {
@@ -13,7 +13,7 @@ export const checkServerSession = async () => {
   return res;
 };
 
-export const getServerMe = async (): Promise<LoginUser> => {
+export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
   const { data } = await nextServer.get('/users/me', {
     headers: {
@@ -44,5 +44,17 @@ export const fetchServerNotes = async (query: string, page: number, tag?: NoteTa
     return res.data;
   } catch {
     throw new Error('Error fetching notes');
+  }
+};
+
+export const fetchServerNoteById = async (noteId: string): Promise<Note> => {
+  try {
+    const cookieStore = await cookies();
+    const res = await nextServer.get<Note>(`/notes/${noteId}`, {
+      headers: { Cookie: cookieStore.toString() },
+    });
+    return res.data;
+  } catch {
+    throw new Error('Error fetching note');
   }
 };

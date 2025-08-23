@@ -2,7 +2,7 @@
 
 import { register } from '@/lib/api/clientApi';
 import css from './SignUp.module.css';
-import { User } from '@/types/user';
+import { RegisterRequest } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ApiError } from '@/lib/api/api';
@@ -15,7 +15,7 @@ const SignUp = () => {
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      const values = Object.fromEntries(formData) as User;
+      const values = Object.fromEntries(formData) as unknown as RegisterRequest;
       const res = await register(values);
       if (res) {
         setUser(res);
